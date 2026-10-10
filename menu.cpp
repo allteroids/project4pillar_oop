@@ -77,14 +77,14 @@ void ConsoleApp::adminMenu(const User& admin) {
         cout << "\nAkun: ";
         admin.displayInfo();
         cout << "--- MENU ADMIN ---\n"
-                  << " 1. Lihat katalog koleksi\n"
-                  << " 2. Tambah koleksi\n"
-                  << " 3. Hapus koleksi\n"
-                  << " 4. Lihat semua pengguna\n"
-                  << " 5. Tambah pengguna\n"
-                  << " 6. Hapus pengguna\n"
-                  << " 7. Lihat semua peminjaman aktif\n"
-                  << " 8. Majukan hari (simulasi)\n"
+                  << " 1. Lihat Katalog Koleksi\n"
+                  << " 2. Tambah Koleksi\n"
+                  << " 3. Hapus Koleksi\n"
+                  << " 4. Lihat Semua Pengguna\n"
+                  << " 5. Tambah Pengguna\n"
+                  << " 6. Hapus Pengguna\n"
+                  << " 7. Lihat Semua Peminjaman Aktif\n"
+                  << " 8. Majukan Hari (Simulasi)\n"
                   << " 0. Logout\n";
         int choice = readInt("Pilih: ");
         if (inputClosed || choice == 0) break;
@@ -93,12 +93,12 @@ void ConsoleApp::adminMenu(const User& admin) {
             switch (choice) {
                 case 1: library.displayAllItems(); break;
                 case 2: addItemFlow(id); break;
-                case 3: library.removeItem(id, readInt("ID koleksi yang dihapus: ")); break;
+                case 3: library.removeItem(id, readInt("ID Koleksi yang Dihapus: ")); break;
                 case 4: library.displayAllUsers(id); break;
                 case 5: addUserFlow(id); break;
-                case 6: library.removeUser(id, readInt("ID pengguna yang dihapus: ")); break;
+                case 6: library.removeUser(id, readInt("ID Pengguna yang Dihapus: ")); break;
                 case 7: library.displayActiveLoans(id); break;
-                case 8: library.advanceDays(readInt("Majukan berapa hari: ")); break;
+                case 8: library.advanceDays(readInt("Majukan Berapa Hari: ")); break;
                 default: cout << "Pilihan tidak dikenal.\n";
             }
         });
@@ -114,10 +114,10 @@ void ConsoleApp::addItemFlow(int adminId) {
     int newId = library.nextItemId(); 
     if (tipe == 1) {
         string penulis = readLine("Penulis: ");
-        int halaman = readInt("Jumlah halaman: ");
+        int halaman = readInt("Jumlah Halaman: ");
         library.addItem(adminId, make_unique<Book>(newId, judul, penulis, halaman));
     } else if (tipe == 2) {
-        int issue = readInt("Nomor edisi: ");
+        int issue = readInt("Nomor Edisi: ");
         library.addItem(adminId, make_unique<Magazine>(newId, judul, issue));
     } else {
         int orang = readInt("Jumlah Pemain (orang): ");
@@ -138,7 +138,7 @@ void ConsoleApp::addUserFlow(int adminId) {
         library.addUser(adminId, make_unique<Dosen>(newId, nama));
     else
         library.addUser(adminId, make_unique<Admin>(newId, nama));
-    cout << "ID akun baru: " << newId << "\n";
+    cout << "ID Akun Baru: " << newId << "\n";
 }
 
 void ConsoleApp::memberMenu(const User& member) {
@@ -147,13 +147,13 @@ void ConsoleApp::memberMenu(const User& member) {
         cout << "\nAkun: ";
         member.displayInfo();
         cout << "--- MENU ANGGOTA ---\n"
-                  << " 1. Lihat katalog koleksi\n"
-                  << " 2. Cari koleksi (judul / penulis)\n"
-                  << " 3. Pinjam koleksi\n"
-                  << " 4. Kembalikan koleksi\n"
-                  << " 5. Lihat pinjaman saya\n"
-                  << " 6. Bayar denda\n"
-                  << " 7. Majukan hari (simulasi)\n"
+                  << " 1. Lihat Katalog Koleksi\n"
+                  << " 2. Cari Koleksi (Judul / Penulis)\n"
+                  << " 3. Pinjam Koleksi\n"
+                  << " 4. Kembalikan Koleksi\n"
+                  << " 5. Lihat Pinjaman Saya\n"
+                  << " 6. Bayar Denda\n"
+                  << " 7. Majukan Hari (Simulasi)\n"
                   << " 0. Logout\n";
         int choice = readInt("Pilih: ");
         if (inputClosed || choice == 0) break;
@@ -162,17 +162,17 @@ void ConsoleApp::memberMenu(const User& member) {
             switch (choice) {
                 case 1: library.displayAllItems(); break;
                 case 2: {
-                    string keyword = readLine("Kata kunci: ");
+                    string keyword = readLine("Kata Kunci: ");
                     auto found = library.search(keyword);
                     if (found.empty()) cout << "Tidak ada koleksi yang cocok.\n";
                     for (const LibraryItem* item : found) item->displayInfo();
                     break;
                 }
-                case 3: library.pinjamItem(id, readInt("ID koleksi yang dipinjam: ")); break;
-                case 4: library.KembalikanItem(id, readInt("ID koleksi yang dikembalikan: ")); break;
+                case 3: library.pinjamItem(id, readInt("ID Koleksi yang Dipinjam: ")); break;
+                case 4: library.KembalikanItem(id, readInt("ID Koleksi yang Dikembalikan: ")); break;
                 case 5: library.displayDendaku(id); break;
-                case 6: library.BayarDenda(id, readLong("Jumlah pembayaran (Rp): ")); break;
-                case 7: library.advanceDays(readInt("Majukan berapa hari: ")); break;
+                case 6: library.BayarDenda(id, readLong("Jumlah Pembayaran (Rp): ")); break;
+                case 7: library.advanceDays(readInt("Majukan Berapa Hari: ")); break;
                 default: cout << "Pilihan tidak dikenal.\n";
             }
         });
