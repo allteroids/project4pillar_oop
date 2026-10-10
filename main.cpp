@@ -52,7 +52,7 @@ void runInteractive() {
     Library library(make_unique<Admin>(kAdminId, "Admin Perpus"));
     seedSampleData(library, true);
 
-    cout << "\nAkun contoh:\n"
+    cout << "\nAkun Contoh:\n"
               << "  Admin     : ID 1\n"
               << "  Mahasiswa : ID 101 (Allida), ID 102 (Azka)\n"
               << "  Dosen     : ID 201 (Dr. Nasikun)\n";
@@ -65,7 +65,7 @@ void runInteractive() {
 void runDemo() {
     Library library(make_unique<Admin>(kAdminId, "Admin Perpus"));
 
-    section("1. SETUP oleh Admin (pewarisan)");
+    section("1. Set-Up oleh Admin (Inheritance)");
     
     seedSampleData(library, false);
 
@@ -74,7 +74,7 @@ void runDemo() {
     cout << "\nPengguna (hanya admin yang boleh melihat):\n";
     library.displayAllUsers(kAdminId);
 
-    section("2. HAK AKSES: Admin vs Anggota");
+    section("2. Hak Akses (Admin vs Anggota)");
     
     attempt("Allida (Mahasiswa) mencoba menambah koleksi",
             [&] { library.addItem(101, make_unique<Book>(8, "Buku Terlarang", "X", 100)); });
@@ -91,7 +91,7 @@ void runDemo() {
     attempt("Admin menghapus anggota ID 103", [&] { library.removeUser(kAdminId, 103); });
     attempt("Admin mencoba menghapus akunnya sendiri", [&] { library.removeUser(kAdminId, kAdminId); });
 
-    section("3. PENCARIAN (overloading / polimorfisme statis)");
+    section("3. Pencarian (Overloading / Static Polimorphism)");
 
     cout << "search(\"data\") -> pencarian berdasarkan kata kunci:\n";
     for (const LibraryItem* item : library.search("data")) {
@@ -109,7 +109,7 @@ void runDemo() {
         found->displayInfo();
     }
 
-    section("4. PEMINJAMAN oleh Anggota (abstraksi)");
+    section("4. Peminjaman oleh Anggota (Abstraction)");
 
     attempt("Allida meminjam Buku #1", [&] { library.pinjamItem(101, 1); });
     attempt("Allida meminjam BoardGame #6", [&] { library.pinjamItem(101, 6); });
@@ -117,9 +117,9 @@ void runDemo() {
     attempt("Dr. Nasikun meminjam Majalah #5", [&] { library.pinjamItem(201, 5); });
     attempt("Azka meminjam Buku #1 (sudah dipinjam Allida)", [&] { library.pinjamItem(102, 1); });
 
-    cout << "\nPinjaman milik Allida (tampilan anggota):\n";
+    cout << "\nPinjaman milik Allida (Tampilan Anggota):\n";
     library.displayDendaku(101);
-    cout << "\nSemua peminjaman aktif (tampilan admin):\n";
+    cout << "\nSemua peminjaman aktif (Tampilan Admin):\n";
     library.displayActiveLoans(kAdminId);
 
     attempt("Admin mencoba menghapus Buku #1 yang sedang dipinjam",
@@ -128,13 +128,13 @@ void runDemo() {
             [&] { library.removeUser(kAdminId, 101); });
 
     
-    section("5. BATAS PINJAM MAHASISWA (enkapsulasi aturan)");
+    section("5. Batas Peminjaman Buku (Rule Encapsulation)");
    
     attempt("Allida meminjam Buku #2 (pinjaman ke-3)", [&] { library.pinjamItem(101, 2); });
     attempt("Allida meminjam Buku #3 (melebihi batas 3)", [&] { library.pinjamItem(101, 3); });
 
     
-    section("6. KETERLAMBATAN (polimorfisme: tarif denda tiap jenis koleksi)");
+    section("6. Keterlambatan (Polimorphism: Tarif Denda Setiap Jenis Koleksi)");
     
     library.advanceDays(10); 
     attempt("Azka mencoba mengembalikan BoardGame #6 milik Allida", [&] { library.KembalikanItem(102, 6); });
@@ -144,10 +144,10 @@ void runDemo() {
     attempt("Dr. Nasikun mengembalikan Majalah #5", [&] { library.KembalikanItem(201, 5); });
     attempt("Allida mengembalikan Buku #1 lagi (sudah dikembalikan)", [&] { library.KembalikanItem(101, 1); });
 
-    cout << "\nStatus pengguna:\n";
+    cout << "\nStatus Pengguna:\n";
     library.displayAllUsers(kAdminId);
 
-    section("7. DENDA MELEBIHI BATAS & PEMBAYARAN");
+    section("7. Denda Melebihi Batas dan Pembayaran");
 
     attempt("Allida meminjam BoardGame #6 lagi", [&] { library.pinjamItem(101, 6); });
     library.advanceDays(6);
@@ -164,39 +164,39 @@ void runDemo() {
     attempt("Allida membayar sebagian denda Rp 50.000", [&] { library.BayarDenda(101, 50000); });
     attempt("Allida meminjam Buku #4 (denda kini di bawah batas)", [&] { library.pinjamItem(101, 4); });
 
-    cout << "\nStatus pengguna:\n";
+    cout << "\nStatus Pengguna:\n";
     library.displayAllUsers(kAdminId);
 
-    section("8. ENKAPSULASI: objek menolak data tidak valid");
+    section("8. Encapsulation: Menolak Data yang Tidak Valid");
 
     attempt("Membuat Buku dengan judul kosong", [&] { Book b(99, "", "X", 100); });
-    attempt("Membuat BoardGame dengan durasi 0", [&] { BoardGame d(98, "Kosong", 0); });
+    attempt("Membuat BoardGame dengan jumlah pemain 0", [&] { BoardGame d(98, "Kosong", 0); });
     attempt("Membuat Mahasiswa dengan ID 0", [&] { Mahasiswa s(0, "Hantu"); });
     attempt("Menambah koleksi dengan ID duplikat", [&] {
         library.addItem(kAdminId, make_unique<Book>(1, "Duplikat", "Z", 10));
     });
 
-    section("9. POLIMORFISME: koleksi heterogen lewat pointer base class");
+    section("9. Polimorphism: Koleksi Heterogen Menggunakan Pointer Base Class");
 
     vector<unique_ptr<LibraryItem>> samples;
     samples.push_back(make_unique<Book>(10, "Contoh Buku", "Penulis", 100));
     samples.push_back(make_unique<Magazine>(11, "Contoh Majalah", 1));
     samples.push_back(make_unique<BoardGame>(12, "Contoh BoardGame", 60));
 
-    cout << "Jenis      | Masa pinjam | Denda telat 5 hari\n";
+    cout << "Jenis      | Masa pinjam | Denda Telat 5 Hari\n";
     for (const auto& s : samples)
         cout << s->getTipe() << string(11 - s->getTipe().size(), ' ') << "| "
                   << s->getMasaPeminjaman() << " hari"
                   << string(s->getMasaPeminjaman() < 10 ? 6 : 5, ' ') << "| "
                   << formatRupiah(s->calculateDenda(5)) << "\n";
 
-    cout << "\nPengguna: izin tiap peran (polimorfisme pada User)\n";
+    cout << "\nPengguna: Izin Akses Setiap User (Polimorphism pada User)\n";
     vector<unique_ptr<User>> people;
     people.push_back(make_unique<Admin>(1, "Contoh Admin"));
     people.push_back(make_unique<Mahasiswa>(2, "Contoh Mahasiswa"));
     people.push_back(make_unique<Dosen>(3, "Contoh Dosen"));
     for (const auto& p : people)
-        cout << "  " << p->getStatusMember() << ": kelola perpustakaan = "
+        cout << "  " << p->getStatusMember() << ": Kelola Perpustakaan = "
                   << (p->canKelola() ? "YA" : "TIDAK") << "\n";
 
     cout << "\nSelesai. Semua objek dibersihkan otomatis oleh unique_ptr.\n";
@@ -206,8 +206,8 @@ void runDemo() {
 
 int main() {
     cout << "=== SISTEM MANAJEMEN PERPUSTAKAAN ===\n"
-              << " 1. Mode interaktif (login sebagai Admin / Anggota)\n"
-              << " 2. Demo otomatis \n"
+              << " 1. Mode Interaktif (Login sebagai Admin / Anggota)\n"
+              << " 2. Demo Otomatis \n"
               << " 0. Keluar\n"
               << "Pilih: ";
 
@@ -223,4 +223,3 @@ int main() {
         cout << "Sampai jumpa.\n";
     return 0;
 }
- 
