@@ -23,5 +23,5 @@ bool Admin::canKelola() const { return true; }
 
 void Admin::displayInfo() const {
     User::displayInfo();
-    cout << " | Hak akses: kelola koleksi & pengguna\n";
+    cout << " | Hak Akses: Kelola Koleksi & Pengguna\n";
 }
